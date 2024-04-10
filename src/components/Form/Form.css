@@ -1,0 +1,5 @@
+.Form-content{
+    border: red solid 1px;    
+    display: flex;
+    flex-direction: column;
+}
