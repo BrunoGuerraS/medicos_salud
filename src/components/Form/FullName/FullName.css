@@ -1,0 +1,9 @@
+.Fullname-container{
+    display: flex;
+}
+
+.Input-container{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}

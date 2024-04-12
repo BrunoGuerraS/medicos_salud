@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
-import department from "../../fakeData/department.json";
-import district from "../../fakeData/district.json";
-import province from "../../fakeData/province.json";
 import { IUser } from "../Search/Search";
+import { Department } from "./Department/Department";
+import { District } from "./District/District";
 import "./Form.css";
+import { FullName } from "./FullName/FullName";
+import { Province } from "./Province/Province";
+
+const defaultValue: IUser = {
+  id: "",
+  am: "",
+  ap: "",
+  departamento: "",
+  provincia: "",
+  distrito: "",
+  name: "",
+  password: "",
+  type: "",
+  user: "",
+};
 
 export const Form = () => {
-  const [state, setState] = useState<IUser>({
-    id: "",
-    am: "",
-    ap: "",
-    departamento: "",
-    distrito: "",
-    name: "",
-    password: "",
-    provincia: "",
-    type: "",
-    user: "",
-  });
+  const [state, setState] = useState<IUser>(defaultValue);
 
-  const [foo, setFoo] = useState();
-
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     console.log("value", value);
     setState({
@@ -30,105 +33,27 @@ export const Form = () => {
     });
   };
 
-  useEffect(() => {
-    console.log("into effect", state);
-  }, [state]);
+  const handlerCancel = () => {
+    setState(defaultValue);
+  };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {}, [state]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("datos", state);
+    console.log(state);
+    // console.log(e.target)
   };
 
   return (
     <>
       <h1>Nuevo usuario</h1>
       <form className="Form-content" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="">Apellido paterno</label>
-          <input
-            type="text"
-            id="aPaterno"
-            name="ap"
-            value={state.ap}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label> Apellido materno</label>
-          <input
-            type="text"
-            id="aMaterno"
-            name="am"
-            value={state.am}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="">Nombres</label>
-          <input
-            type="text"
-            id="nombre"
-            name="name"
-            value={state.name}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="">Departamento</label>
-          <select
-            id="departamento"
-            name="departamento"
-            value={state.departamento}
-            onChange={handleChange}
-          >
-            {department &&
-              department.map((item) => {
-                return (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                );
-              })}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="">Provincia</label>
-          <select
-            name="provincia"
-            id="provincia"
-            value={state.provincia}
-            onChange={handleChange}
-          >
-            {province
-              .filter((prov) => {
-                console.log(`${state.departamento}`);
-                return prov.department_id === state.departamento;
-              })
-              .map((item) => {
-                return <option value={item.id}>{item.name}</option>;
-              })}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="">Distrito</label>
-          <select
-            name="distrito"
-            id="distrito"
-            value={state.distrito}
-            onChange={handleChange}
-          >
-            {district
-              .filter((dis) => {
-                return dis.province_id === state.provincia
-              })
-              .map((item) => {
-                return <option value={item.id}>{item.name}</option>;
-              })}
-          </select>
+        <FullName state={state} handleChange={handleChange} />
+        <div className="Location-container">
+          <Department state={state} handleChange={handleChange} />
+          <Province setState={setState} state={state} handleChange={handleChange}/>
+          <District state={state} handleChange={handleChange} />
         </div>
 
         <div>
@@ -155,7 +80,9 @@ export const Form = () => {
 
         <div>
           <button>Guardar</button>
-          <button>Cancelar</button>
+          <button type="button" onClick={handlerCancel}>
+            Cancelar
+          </button>
         </div>
       </form>
     </>

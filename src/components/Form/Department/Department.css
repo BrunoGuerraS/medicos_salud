@@ -1,0 +1,6 @@
+.Department-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 20px;
+}
